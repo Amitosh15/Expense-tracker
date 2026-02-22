@@ -1,4 +1,9 @@
 import {
+  addExpense,
+  deleteExpense,
+  getExpense,
+} from "../controllers/expenseController.js";
+import {
   addIncome,
   deleteIncome,
   getIncome,
@@ -8,4 +13,7 @@ export default function transictionRoute(app) {
   app.post("/api/v1/add-income", addIncome);
   app.get("/api/v1/get-income", getIncome);
   app.delete("/api/v1/delete-income/:id", deleteIncome);
+  app.post("/api/v1/add-expenses", addExpense);
+  app.get("/api/v1/get-expenses", getExpense);
+  app.delete("/api/v1/delete-expense/:id", deleteExpense);
 }
