@@ -1,0 +1,29 @@
+.navigation {
+    padding: 2rem 1.5rem;
+    margin: 20px 20px;
+    height: calc(100vh - 40px);
+}
+
+.user-container img {
+    background-color: #fcf6f9;
+    border: 2px solid #ffffff;
+    box-shadow: 0 1px 17px rgba(0, 0, 0, 0.06);
+}
+
+.user-details h2 {
+    color: rgba(34, 34, 96, 1)
+}
+
+.user-details p {
+    color: rgba(34, 34, 96, 0.6)
+}
+
+.menu-items li {
+    transition: all .4s ease-in-out;
+}
+
+.menu-items li i {
+    color: rgba(34, 34, 96, 0.6);
+    font-size: 1.4rem;
+    transition: all .4s ease-in-out;
+}
