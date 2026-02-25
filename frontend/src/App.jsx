@@ -1,12 +1,13 @@
+import { Outlet } from "react-router-dom";
 import "./App.css";
+import Navigation from "./components/Navigation/Navigation";
 
 function App() {
   return (
-    <>
-      <div>
-        <h1>Hello</h1>
-      </div>
-    </>
+    <div className="flex">
+      <Navigation />
+      <Outlet />
+    </div>
   );
 }
 
