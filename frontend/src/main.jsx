@@ -21,10 +21,6 @@ const appRouter = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "/transactions",
-        element: <Transactions />,
-      },
-      {
         path: "/incomes",
         element: <Income />,
       },
