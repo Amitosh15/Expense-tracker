@@ -3,7 +3,6 @@ import "./index.css";
 import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Dashboard from "./components/Dashboard/Dashboard.jsx";
-import Transactions from "./components/Transactions/Transactions.jsx";
 import Income from "./components/Incomes/Income.jsx";
 import Expenses from "./components/Expenses/Expenses.jsx";
 
