@@ -1,8 +1,8 @@
 import {
   bitcoin,
-  book,
-  card,
   circle,
+  card,
+  book,
   clothing,
   food,
   freelance,
