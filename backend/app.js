@@ -4,6 +4,7 @@ dotenv.config();
 import cors from "cors";
 import connectDB from "./db/db.js";
 import transictionRoute from "./routes/transictionRoute.js";
+import userRoute from "./routes/userRoute.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,6 +19,9 @@ app.get("/", (req, res) => {
 
 //routes
 transictionRoute(app);
+
+//userRoute
+userRoute(app);
 
 connectDB();
 
