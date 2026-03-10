@@ -5,6 +5,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Dashboard from "./components/Dashboard/Dashboard.jsx";
 import Income from "./components/Incomes/Income.jsx";
 import Expenses from "./components/Expenses/Expenses.jsx";
+import Login from "./components/Login/Login.jsx";
+import Signup from "./components/Signup/Signup.jsx";
+import ProtectedRoute from "./ProtectedRoute.jsx";
+import PublicRoute from "./PublicRoute.jsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -17,15 +21,43 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/dashboard",
-        element: <Dashboard />,
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/incomes",
-        element: <Income />,
+        element: (
+          <ProtectedRoute>
+            <Income />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/expenses",
-        element: <Expenses />,
+        element: (
+          <ProtectedRoute>
+            <Expenses />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/login",
+        element: (
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        ),
+      },
+      {
+        path: "/signup",
+        element: (
+          <PublicRoute>
+            <Signup />
+          </PublicRoute>
+        ),
       },
     ],
   },
