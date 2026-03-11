@@ -2,7 +2,7 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Form.css";
-import API from "../../Api/Axios";
+import { addIncome } from "../../Api/Axios";
 import { plus } from "../../utils/Icons";
 
 const Form = ({ fetchIncomes }) => {
@@ -27,7 +27,7 @@ const Form = ({ fetchIncomes }) => {
     }
 
     try {
-      const res = await API.post("/add-income", formData);
+      await addIncome(formData);
 
       fetchIncomes();
 

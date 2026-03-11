@@ -51,3 +51,33 @@ select {
         color: rgba(34, 34, 96, 1);
     }
 }
+
+/* Mobile */
+@media screen and (max-width: 767px) {
+    form {
+        gap: 10px;
+        width: 60vw;
+        margin: auto;
+    }
+}
+
+/* Tablet */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    form {
+        gap: 8px;
+    }
+}
+
+/* Laptop */
+@media screen and (min-width: 1024px) and (max-width: 1439px) {
+    form {
+        gap: 10px;
+    }
+}
+
+/* Desktop / Large screens */
+@media screen and (min-width: 1440px) {
+    form {
+        gap: 18px;
+    }
+}
