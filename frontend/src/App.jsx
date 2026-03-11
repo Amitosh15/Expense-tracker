@@ -5,7 +5,7 @@ import { GlobalProvider } from "./context/GlobalContext";
 
 function App() {
   return (
-    <div className="flex">
+    <div className="main flex">
       <GlobalProvider>
         <Navigation />
         <Outlet />
