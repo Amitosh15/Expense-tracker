@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "../../styles/global.css";
+import "../Incomes/Income.css";
 import { deleteExpenses } from "../../Api/Axios";
 import { calender, comment, trash } from "../../utils/Icons";
 import { expenseCategories } from "../CategoryConfig/categoryConfig";
@@ -61,7 +62,12 @@ const Expenses = () => {
                     </p>
                     {/* Button */}
                     <div className="delete-btn">
-                      <button onClick={() => handleDelete(_id)}>{trash}</button>
+                      <button
+                        className="flex items-center justify-center"
+                        onClick={() => handleDelete(_id)}
+                      >
+                        {trash}
+                      </button>
                     </div>
                   </div>
                 </div>
