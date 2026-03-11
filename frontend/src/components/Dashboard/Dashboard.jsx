@@ -5,13 +5,13 @@ import "../../styles/global.css";
 import History from "../History/History";
 
 const Dashboard = () => {
-  const { totalExpenses, totalIncome, totalBalance, getIncomes } =
-    useGlobalContext();
+  const { totalExpenses, totalIncome, totalBalance } = useGlobalContext();
+
   return (
     <div className="container">
       <div className="dashboard-con">
         <h1 className="text-2xl">All Transactions</h1>
-        <div className="stats-con flex">
+        <div className="stats-con">
           <div className="chart-main">
             <div className="chart-con">
               <Chart />
