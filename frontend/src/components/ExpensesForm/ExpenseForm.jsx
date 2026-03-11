@@ -1,7 +1,6 @@
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import "./ExpenseForm.css";
 import { addExpenses } from "../../Api/Axios";
 import { plus } from "../../utils/Icons";
 
@@ -84,6 +83,7 @@ const ExpenseForm = ({ fetchExpenses }) => {
         >
           <option value="">Select Category</option>
           <option value="education">Education</option>
+          <option value="shopping">Shopping</option>
           <option value="groceries">Groceries</option>
           <option value="health">Health</option>
           <option value="subscriptions">Subscriptions</option>
