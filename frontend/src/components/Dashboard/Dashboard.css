@@ -1,10 +1,11 @@
 h1 {
     color: var(--primary-color);
     font-weight: 700;
+    margin-bottom: 10px;
 }
 
 h2 {
-    color: #222260;
+    color: var(--primary-color);
     font-size: 1.5rem;
     font-weight: 600;
 }
@@ -55,8 +56,108 @@ h2 {
     align-items: center;
 
     p {
-        color: #42AD00;
+        color: var(--color-green);
         opacity: 0.6;
         font-size: 2.5rem;
+    }
+}
+
+/* -------------------- Responsive --------------- */
+
+/* Mobile */
+@media screen and (max-width: 767px) {
+    .container {
+        padding: 5px;
+    }
+
+    .chart-con {
+        height: 30vh;
+    }
+
+    .balance {
+        align-items: start;
+    }
+
+    .stats-con {
+        grid-template-columns: 1fr;
+    }
+
+    .amount-con {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .income,
+    .expense,
+    .balance {
+        grid-column: span 1;
+
+        p {
+            font-size: 1.8rem;
+        }
+    }
+
+    .balance {
+        grid-column: span 1;
+    }
+}
+
+/* Tablet */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .stats-con {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .income,
+    .expense,
+    .balance {
+        grid-column: span 2;
+
+        p {
+            font-size: 1.8rem;
+        }
+    }
+}
+
+/* Laptop */
+@media screen and (min-width: 1024px) and (max-width: 1439px) {
+    .chart-con {
+        height: 200px;
+    }
+
+    .income,
+    .expense,
+    .balance {
+        padding: 0.5rem;
+
+        p {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+    }
+
+    .amount-con h2 {
+        font-size: 1rem;
+    }
+}
+
+/* Desktop / Large screens */
+@media screen and (min-width: 1440px) {
+
+    .income,
+    .expense,
+    .balance {
+        text-align: center;
+        padding: 0.5rem;
+
+        p {
+            font-size: 1.7rem;
+            font-weight: 700;
+        }
+    }
+
+    .amount-con h2 {
+        font-size: 1.6rem;
+        font-weight: 700;
     }
 }
