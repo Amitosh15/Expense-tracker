@@ -18,7 +18,6 @@ import {
 
 export const categoryConfig = {
   salary: money,
-  shopping: shopping,
   freelancing: freelance,
   investments: piggy,
   stocks: stocks,
@@ -31,6 +30,7 @@ export const categoryConfig = {
 export const expenseCategories = {
   education: book,
   groceries: food,
+  shopping: shopping,
   health: medical,
   subscriptions: tv,
   takeways: takeaway,
