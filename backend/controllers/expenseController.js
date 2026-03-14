@@ -11,11 +11,12 @@ export const addExpense = async (req, res) => {
     category,
     description,
     date,
+    user: req.user,
   });
 
   try {
     // Validation
-    if (!title || !amount || !category || !description || !date) {
+    if (!title || !amount || !category || !date) {
       return res.status(400).json({ message: "All fields are required!" });
     }
     if (amount <= 0 || amount === "number") {
@@ -32,7 +33,9 @@ export const addExpense = async (req, res) => {
 // Get
 export const getExpense = async (req, res) => {
   try {
-    const incomes = await ExpenseModel.find().sort({ createdAt: -1 });
+    const incomes = await ExpenseModel.find({ user: req.user }).sort({
+      createdAt: -1,
+    });
     res.status(200).json(incomes);
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
@@ -44,9 +47,12 @@ export const deleteExpense = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const income = await ExpenseModel.findByIdAndDelete(id);
+    const expense = await ExpenseModel.findByIdAndDelete({
+      _id: id,
+      user: req.user,
+    });
 
-    if (!income) {
+    if (!expense) {
       return res.status(404).json({ message: "Expense not found" });
     }
 
