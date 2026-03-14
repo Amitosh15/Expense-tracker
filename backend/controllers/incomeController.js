@@ -1,5 +1,6 @@
 import IncomeModel from "../models/IncomeModel.js";
 
+// ADD INCOME
 export const addIncome = async (req, res) => {
   const { title, amount, category, description, date } = req.body;
 
@@ -10,11 +11,12 @@ export const addIncome = async (req, res) => {
     category,
     description,
     date,
+    user: req.user,
   });
 
   try {
     // Validation
-    if (!title || !amount || !category || !description || !date) {
+    if (!title || !amount || !category || !date) {
       return res.status(400).json({ message: "All fields are required!" });
     }
     if (amount <= 0 || amount === "number") {
@@ -28,20 +30,27 @@ export const addIncome = async (req, res) => {
   }
 };
 
+// GET INCOME
 export const getIncome = async (req, res) => {
   try {
-    const incomes = await IncomeModel.find().sort({ createdAt: -1 });
+    const incomes = await IncomeModel.find({ user: req.user }).sort({
+      createdAt: -1,
+    });
     res.status(200).json(incomes);
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
 };
 
+// DELETE INCOME
 export const deleteIncome = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const income = await IncomeModel.findByIdAndDelete(id);
+    const income = await IncomeModel.findByIdAndDelete({
+      _id: id,
+      user: req.user,
+    });
 
     if (!income) {
       return res.status(404).json({ message: "Income not found" });
