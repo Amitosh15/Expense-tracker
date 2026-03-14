@@ -3,6 +3,11 @@ import mongoose from "mongoose";
 // Schema
 const expenseSchema = new mongoose.Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -17,7 +22,7 @@ const expenseSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      default: "income",
+      default: "expense",
     },
     date: {
       type: Date,
@@ -31,7 +36,6 @@ const expenseSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: true,
       maxLength: 20,
       trim: true,
     },
