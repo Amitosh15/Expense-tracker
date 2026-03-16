@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { addExpenses } from "../../Api/Axios";
 import { plus } from "../../utils/Icons";
+import { toast } from "react-toastify";
 
 const ExpenseForm = ({ fetchExpenses }) => {
   const [formData, setFormData] = useState({
@@ -20,11 +21,6 @@ const ExpenseForm = ({ fetchExpenses }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.title || !formData.amount || !formData.date) {
-      alert("Please fill all required fields");
-      return;
-    }
-
     try {
       await addExpenses(formData);
 
@@ -38,8 +34,15 @@ const ExpenseForm = ({ fetchExpenses }) => {
         category: "",
         description: "",
       });
+      toast.success("Expense added successfully");
     } catch (error) {
-      console.log(error);
+      if (error.response?.data?.errors) {
+        error.response.data.errors.forEach((err) => toast.error(err.message));
+      } else if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Failed to add expense");
+      }
     }
   };
   return (
