@@ -20,7 +20,7 @@ const Signup = () => {
 
     try {
       await registerUser(signupInfo);
-      alert("Signup successfully");
+      toast.success("Signup successful!");
 
       setSignupInfo({
         name: "",
