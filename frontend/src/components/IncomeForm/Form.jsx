@@ -4,6 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./Form.css";
 import { addIncome } from "../../Api/Axios";
 import { plus } from "../../utils/Icons";
+import { toast } from "react-toastify";
 
 const Form = ({ fetchIncomes }) => {
   const [formData, setFormData] = useState({
@@ -21,11 +22,6 @@ const Form = ({ fetchIncomes }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.title || !formData.amount || !formData.date) {
-      alert("Please fill all required fields");
-      return;
-    }
-
     try {
       await addIncome(formData);
 
@@ -39,8 +35,15 @@ const Form = ({ fetchIncomes }) => {
         category: "",
         description: "",
       });
+      toast.success("Income added successfully");
     } catch (error) {
-      console.log(error);
+      if (error.response?.data?.errors) {
+        error.response.data.errors.forEach((err) => toast.error(err.message));
+      } else if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Failed to add income");
+      }
     }
   };
   return (
@@ -50,7 +53,7 @@ const Form = ({ fetchIncomes }) => {
           type="text"
           value={formData.title}
           name={"title"}
-          placeholder="Salary Title"
+          placeholder="Title"
           onChange={handleChange}
         />
       </div>
@@ -59,7 +62,7 @@ const Form = ({ fetchIncomes }) => {
           type="text"
           value={formData.amount}
           name={"amount"}
-          placeholder="Salary Amount"
+          placeholder="Amount"
           onChange={handleChange}
         />
       </div>
