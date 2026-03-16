@@ -23,6 +23,7 @@ const Login = () => {
       const { token, user } = res.data; // Destructure user object
 
       login(token, user); // Pass user object to login
+      toast.success("Login successful!");
       // Clear the form
       setLoginInfo({
         email: "",
