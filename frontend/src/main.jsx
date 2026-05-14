@@ -10,58 +10,63 @@ import Signup from "./components/Signup/Signup.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import PublicRoute from "./PublicRoute.jsx";
 
-const appRouter = createBrowserRouter([
+const appRouter = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <App />,
+      children: [
+        {
+          path: "/",
+          element: <Dashboard />,
+        },
+        {
+          path: "/dashboard",
+          element: (
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/incomes",
+          element: (
+            <ProtectedRoute>
+              <Income />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/expenses",
+          element: (
+            <ProtectedRoute>
+              <Expenses />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/login",
+          element: (
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          ),
+        },
+        {
+          path: "/signup",
+          element: (
+            <PublicRoute>
+              <Signup />
+            </PublicRoute>
+          ),
+        },
+      ],
+    },
+  ],
   {
-    path: "/",
-    element: <App />,
-    children: [
-      {
-        path: "/",
-        element: <Dashboard />,
-      },
-      {
-        path: "/dashboard",
-        element: (
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "/incomes",
-        element: (
-          <ProtectedRoute>
-            <Income />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "/expenses",
-        element: (
-          <ProtectedRoute>
-            <Expenses />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "/login",
-        element: (
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
-        ),
-      },
-      {
-        path: "/signup",
-        element: (
-          <PublicRoute>
-            <Signup />
-          </PublicRoute>
-        ),
-      },
-    ],
+    basename: "/expense", // ✅ THIS IS THE FIX
   },
-]);
+);
 
 createRoot(document.getElementById("root")).render(
   <RouterProvider router={appRouter}></RouterProvider>,
