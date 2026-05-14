@@ -4,6 +4,7 @@ import Navigation from "./components/Navigation/Navigation";
 import { GlobalProvider } from "./context/GlobalContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Zoom } from "react-toastify";
 
 function App() {
   return (
@@ -11,7 +12,14 @@ function App() {
       <GlobalProvider>
         <Navigation />
         <Outlet />
-        <ToastContainer />
+        <ToastContainer
+          autoClose={1500}
+          position="top-center"
+          pauseOnHover={false}
+          theme="colored"
+          hideProgressBar
+          transition={Zoom}
+        />
       </GlobalProvider>
     </div>
   );

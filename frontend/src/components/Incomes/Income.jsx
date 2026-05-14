@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "../../styles/global.css";
 import Form from "../IncomeForm/Form";
 import { deleteIncome } from "../../Api/Axios";
@@ -11,7 +11,11 @@ const Income = () => {
   const { incomes, getIncomes, totalIncome } = useGlobalContext();
 
   useEffect(() => {
-    getIncomes();
+    try {
+      getIncomes();
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   // Delete income

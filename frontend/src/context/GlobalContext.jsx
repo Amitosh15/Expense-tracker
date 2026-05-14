@@ -6,7 +6,6 @@ const GlobalContext = React.createContext();
 export const GlobalProvider = ({ children }) => {
   const [incomes, setIncomes] = useState([]);
   const [expenses, setExpenses] = useState([]);
-  const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -26,22 +25,14 @@ export const GlobalProvider = ({ children }) => {
   }, []);
 
   const getIncomes = async () => {
-    try {
-      const response = await getIncome();
-      setIncomes(response.data);
-    } catch (err) {
-      setError(err.response.data.message);
-    }
+    const response = await getIncome();
+    setIncomes(response.data);
   };
 
   const getExpenses = async () => {
-    try {
-      // Assuming you have a getExpense function in your Api/Axios
-      const response = await getExpensesUrl();
-      setExpenses(response.data);
-    } catch (err) {
-      setError(err.response.data.message);
-    }
+    // Assuming you have a getExpense function in your Api/Axios
+    const response = await getExpensesUrl();
+    setExpenses(response.data);
   };
 
   const totalIncome = () => {
@@ -95,8 +86,6 @@ export const GlobalProvider = ({ children }) => {
         expenses,
         getIncomes,
         getExpenses,
-        error,
-        setError,
         totalIncome,
         totalExpenses,
         totalBalance,
