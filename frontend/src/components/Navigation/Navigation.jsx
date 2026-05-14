@@ -1,5 +1,5 @@
 import { signout } from "../../utils/Icons";
-import userimg from "../../img/UserImg.png";
+import userimg from "../../img/userimg.png";
 import { menuItems } from "../../utils/menuItem";
 import "./Navigation.css";
 import { NavLink, useNavigate } from "react-router-dom";
