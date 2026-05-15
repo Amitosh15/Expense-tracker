@@ -1,4 +1,4 @@
-name: Fast Deploy
+name: Ultra Fast Deploy
 
 on:
   push:
@@ -10,7 +10,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to Linux Server
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # FRONTEND BUILD ON GITHUB
+      - name: Build Frontend
+        run: |
+          cd frontend
+          npm ci
+          npm run build
+
+      # BACKEND INSTALL ONLY IF NEEDED
+      - name: Install Backend
+        run: |
+          cd backend
+          npm ci
+
+      # DEPLOY TO SERVER
+      - name: Deploy Server
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -18,43 +40,27 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
 
-            echo "🚀 FAST DEPLOY STARTED"
+            echo "🚀 FAST DEPLOY"
 
-            # Load Node 20
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-            nvm use 20
 
-            # Go to project
             cd ~/ExpenseTracker
 
-            # Pull latest code
             git pull origin main
-
-            # Backend restart only
-            cd backend
 
             export PATH=$PATH:/usr/local/bin
 
-            pm2 restart backend || pm2 start app.js --name backend
+            pm2 restart backend || pm2 start backend/app.js --name backend
 
-            # Frontend build
-            cd ../frontend
-
-            npm run build
-
-            # Restart nginx safely
             sudo systemctl start nginx
             sudo systemctl reload nginx
 
-            # Health check
             STATUS=$(curl -o /dev/null -s -w "%{http_code}" http://localhost/expense/)
 
             if [ "$STATUS" -eq 200 ]; then
               echo "✅ WEBSITE LIVE"
             else
               echo "❌ WEBSITE DOWN"
-              systemctl status nginx --no-pager
-              pm2 list
               exit 1
             fi
