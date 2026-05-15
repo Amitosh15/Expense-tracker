@@ -1,0 +1,82 @@
+name: Expense Tracker Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy To Linux Server
+        uses: appleboy/ssh-action@v1.0.0
+
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+          script: |
+
+            echo "🚀 DEPLOY STARTED"
+
+            # =========================
+            # LOAD NODE 20
+            # =========================
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+            nvm use 20
+
+            node -v
+            npm -v
+
+            # =========================
+            # GO PROJECT
+            # =========================
+            cd ~/ExpenseTracker
+
+            # =========================
+            # PULL LATEST CODE
+            # =========================
+            git pull origin main
+
+            # =========================
+            # BACKEND UPDATE
+            # =========================
+            cd backend
+
+            npm install
+
+            export PATH=$PATH:/usr/local/bin:/home/Demo/.npm-global/bin
+
+            pm2 restart backend || pm2 start app.js --name backend
+
+            # =========================
+            # FRONTEND BUILD
+            # =========================
+            cd ../frontend
+
+            npm install
+
+            npm run build
+
+            # =========================
+            # RESTART NGINX
+            # =========================
+            sudo systemctl restart nginx
+
+            # =========================
+            # HEALTH CHECK
+            # =========================
+            HTTP_STATUS=$(curl -o /dev/null -s -w "%{http_code}" http://localhost/expense/)
+
+            echo "HTTP STATUS: $HTTP_STATUS"
+
+            if [ "$HTTP_STATUS" -ne 200 ]; then
+              echo "❌ WEBSITE DOWN"
+              exit 1
+            fi
+
+            echo "✅ DEPLOY SUCCESSFUL"
