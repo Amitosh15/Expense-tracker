@@ -1,30 +1,69 @@
-script: |
+name: Ultra Fast Deploy
 
-  echo "🚀 FAST DEPLOY"
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+on:
+  push:
+    branches:
+      - main
 
-  cd ~/ExpenseTracker
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-  # IMPORTANT FIX
-  git reset --hard
-  git clean -fd
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  git pull origin main
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
 
-  export PATH=$PATH:/usr/local/bin
+      # FRONTEND BUILD ON GITHUB
+      - name: Build Frontend
+        run: |
+          cd frontend
+          npm ci
+          npm run build
 
-  pm2 restart backend || pm2 start backend/app.js --name backend
+      # BACKEND INSTALL ONLY IF NEEDED
+      - name: Install Backend
+        run: |
+          cd backend
+          npm ci
 
-  sudo systemctl start nginx
-  sudo systemctl reload nginx
+      # DEPLOY TO SERVER
+      - name: Deploy Server
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
 
-  STATUS=$(curl -o /dev/null -s -w "%{http_code}" http://localhost/expense/)
+            echo "🚀 FAST DEPLOY"
 
-  if [ "$STATUS" -eq 200 ]; then
-    echo "✅ WEBSITE LIVE"
-  else
-    echo "❌ WEBSITE DOWN"
-    exit 1
-  fi
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+            cd ~/ExpenseTracker
+
+            git pull origin main
+
+            export PATH=$PATH:/usr/local/bin
+
+            pm2 restart backend || pm2 start backend/app.js --name backend
+
+            sudo systemctl start nginx
+            sudo systemctl reload nginx
+
+            STATUS=$(curl -o /dev/null -s -w "%{http_code}" http://localhost/expense/)
+
+            if [ "$STATUS" -eq 200 ]; then
+              echo "✅ WEBSITE LIVE"
+            else
+              echo "❌ WEBSITE DOWN"
+              exit 1
+            fi
