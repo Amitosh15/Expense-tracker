@@ -1,60 +1,78 @@
-script: |
+name: Fast Deploy
 
-  echo "🚀 FAST DEPLOY"
+on:
+  push:
+    branches:
+      - main
 
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-  nvm use 20
+    steps:
+      - name: Deploy to Linux Server
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
 
-  cd ~/ExpenseTracker
+            echo "🚀 FAST DEPLOY"
 
-  # Clean changes
-  git reset --hard
-  git clean -fd
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
-  # Pull latest code
-  git pull origin main
+            nvm use 20
 
-  # =========================
-  # FRONTEND BUILD
-  # =========================
-  cd frontend
+            cd ~/ExpenseTracker
 
-  npm run build
+            # Clean local changes
+            git reset --hard
+            git clean -fd
 
-  # =========================
-  # BACKEND RESTART
-  # =========================
-  cd ../backend
+            # Pull latest code
+            git pull origin main
 
-  export PATH=$PATH:/usr/local/bin
+            # =========================
+            # FRONTEND BUILD
+            # =========================
+            cd frontend
 
-  pm2 restart backend || pm2 start app.js --name backend
+            npm run build
 
-  # =========================
-  # NGINX START + RELOAD
-  # =========================
-  sudo systemctl start nginx
-  sudo systemctl reload nginx
+            # =========================
+            # BACKEND RESTART
+            # =========================
+            cd ../backend
 
-  # =========================
-  # HEALTH CHECK
-  # =========================
-  STATUS=$(curl -o /dev/null -s -w "%{http_code}" http://localhost/expense/)
+            export PATH=$PATH:/usr/local/bin
 
-  echo "STATUS = $STATUS"
+            pm2 restart backend || pm2 start app.js --name backend
 
-  if [ "$STATUS" -eq 200 ]; then
-    echo "✅ WEBSITE LIVE"
-  else
-    echo "❌ WEBSITE DOWN"
+            # =========================
+            # START + RELOAD NGINX
+            # =========================
+            sudo systemctl start nginx
+            sudo systemctl reload nginx
 
-    echo "NGINX STATUS:"
-    systemctl status nginx --no-pager
+            # =========================
+            # HEALTH CHECK
+            # =========================
+            STATUS=$(curl -o /dev/null -s -w "%{http_code}" http://localhost/expense/)
 
-    echo "PM2 STATUS:"
-    pm2 list
+            echo "STATUS = $STATUS"
 
-    exit 1
-  fi
+            if [ "$STATUS" -eq 200 ]; then
+              echo "✅ WEBSITE LIVE"
+            else
+              echo "❌ WEBSITE DOWN"
+
+              echo "NGINX STATUS:"
+              systemctl status nginx --no-pager
+
+              echo "PM2 STATUS:"
+              pm2 list
+
+              exit 1
+            fi
